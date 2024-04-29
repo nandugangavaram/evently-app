@@ -52,6 +52,7 @@ export async function POST(req: Request) {
 
   // Get the type of event
   const eventType = evt.type;
+  console.log("🚀 ~ POST ~ evt:", evt);
 
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, first_name, last_name, username } =
@@ -77,6 +78,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: "OK", user: newUser });
   }
+  console.log("🚀 ~ POST ~ evt.data:", evt.data);
+  console.log("🚀 ~ POST ~ evt.data:", evt.data);
   if (eventType === "user.updated") {
     const { id, image_url, first_name, last_name, username } = evt.data;
 
