@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { WebhookEvent, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -52,7 +53,6 @@ export async function POST(req: Request) {
 
   // Get the type of event
   const eventType = evt.type;
-  console.log("🚀 ~ POST ~ evt:", evt);
 
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, first_name, last_name, username } =
@@ -76,10 +76,9 @@ export async function POST(req: Request) {
       });
     }
 
+    revalidatePath("/");
     return NextResponse.json({ message: "OK", user: newUser });
   }
-  console.log("🚀 ~ POST ~ evt.data:", evt.data);
-  console.log("🚀 ~ POST ~ evt.data:", evt.data);
   if (eventType === "user.updated") {
     const { id, image_url, first_name, last_name, username } = evt.data;
 
